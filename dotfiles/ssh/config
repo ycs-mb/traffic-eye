@@ -24,8 +24,8 @@ Host *
     # Add keys to SSH agent
     AddKeysToAgent yes
 
-    # Use keychain on macOS
-    UseKeychain yes
+    # Use keychain on macOS (disabled on Linux)
+    # UseKeychain yes
 
     # Identity files (uncomment and customize)
     # IdentityFile ~/.ssh/id_ed25519

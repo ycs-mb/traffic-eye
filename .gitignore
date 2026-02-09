@@ -37,7 +37,7 @@ data/*.db-*
 data/helmet_dataset/
 
 # Models (binary files)
-models/*.tflite
+# models/*.tflite  # Commented - including models in repo
 models/ocr/
 
 # OS
