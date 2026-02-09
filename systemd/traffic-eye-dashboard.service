@@ -1,14 +1,17 @@
 [Unit]
-Description=Traffic-Eye Web Dashboard
+Description=Traffic-Eye Live Web Dashboard with Camera Feed
 After=network.target
 
 [Service]
 Type=simple
 User=yashcs
 WorkingDirectory=/home/yashcs/traffic-eye
-ExecStart=/home/yashcs/traffic-eye/venv/bin/python src/web/dashboard.py
+ExecStart=/home/yashcs/traffic-eye/venv/bin/python src/web/dashboard_live.py
 Restart=always
 RestartSec=5
+
+# Environment
+Environment=PYTHONUNBUFFERED=1
 
 [Install]
 WantedBy=multi-user.target
