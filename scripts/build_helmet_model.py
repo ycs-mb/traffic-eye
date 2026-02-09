@@ -11,7 +11,7 @@ Usage:
     python scripts/build_helmet_model.py
 
 Output:
-    - models/helmet_cls_int8.tflite
+    - models/helmet_cls_int8.tflite. 
     - models/helmet_model_metadata.json (updated with real metrics)
 """
 
