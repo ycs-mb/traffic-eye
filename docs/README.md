@@ -30,6 +30,10 @@ Historical documentation from development and setup phases:
 - `CLOUD_OCR_SETUP_COMPLETE.md` - Initial cloud OCR setup
 - `GEMINI_OCR_COMPLETE.md` - Gemini API configuration and testing
 - `VERTEX_AI_CONFIGURED.md` - Vertex AI setup (not used)
+- `CAMERA_DEPLOYMENT.md` - USB webcam deployment summary
+- `POWER_SUPPLY_GUIDE.md` - Hardware power supply guide
+- `USB_WEBCAM_SETUP_COMPLETE.md` - USB webcam setup confirmation
+- `WEBCAM_MIGRATION.md` - Migration from Pi Camera to USB webcam
 
 ### **Testing Documentation** (`archive/testing/`)
 - `E2E_TEST_RESULTS_FINAL.md` - End-to-end test results
@@ -41,6 +45,10 @@ Historical documentation from development and setup phases:
 - `REPORTING_CHECKLIST.md` - Reporting system checklist
 - `REPORTING_IMPLEMENTATION.md` - Reporting implementation details
 - `REPORTING_SUMMARY.md` - Reporting system summary
+- `DEPLOYMENT_STATUS.md` - Current deployment status report
+- `DEPLOYMENT_SUMMARY.md` - Overall deployment summary
+- `DASHBOARD_FIXES.md` - Dashboard bug fixes log
+- `DASHBOARD_UPGRADE.md` - Mission control dashboard upgrade report
 
 ### **Planning** (`archive/planning/`)
 - `AGENT_TEAM_PROMPTS.md` - Agent team development strategies
@@ -96,12 +104,13 @@ Historical documentation from development and setup phases:
 
 ## 🔄 Documentation Updates
 
-**Last Updated**: 2026-02-09
+**Last Updated**: 2026-02-10
 
 ### Recent Changes
 - ✅ Created organized docs/ structure
 - ✅ Moved field testing documentation to docs/field-testing/
 - ✅ Archived historical documentation to docs/archive/
+- ✅ Updated archive with dashboard and webcam deployment docs (2026-02-10)
 - ✅ Created this README as documentation index
 
 ### Maintenance

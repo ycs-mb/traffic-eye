@@ -156,3 +156,39 @@ When adding new documentation:
 **Organization Completed By**: Claude Code
 **Date**: 2026-02-09
 **Status**: ✅ Complete and Verified
+
+---
+
+## Update: 2026-02-10
+
+### 1. Archived New Documentation
+
+Moved newly created reports and setup guides from root to archive.
+
+**From Root → docs/archive/setup/**:
+- CAMERA_DEPLOYMENT.md
+- POWER_SUPPLY_GUIDE.md
+- USB_WEBCAM_SETUP_COMPLETE.md
+- WEBCAM_MIGRATION.md
+
+**From Root → docs/archive/reports/**:
+- DEPLOYMENT_STATUS.md
+- DEPLOYMENT_SUMMARY.md
+- DASHBOARD_FIXES.md
+- DASHBOARD_UPGRADE.md
+
+### 2. Updated Root
+
+- Kept `README.md` and `CLAUDE.md` in root for reference.
+- All other `.md` files moved to `docs/`.
+
+### 3. Updated Documentation Index
+
+- Updated `docs/README.md` to include references to the new archived files.
+
+---
+
+**Organization Updated By**: Claude Code
+**Date**: 2026-02-10
+**Status**: ✅ Complete and Verified
+
