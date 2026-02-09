@@ -16,8 +16,9 @@ logger = logging.getLogger(__name__)
 
 
 def create_camera(config: AppConfig, video_file: Optional[str] = None) -> CameraBase:
-    """Create a camera instance based on platform."""
+    """Create a camera instance based on platform and camera type config."""
     platform = resolve_platform(config)
+    camera_type = config.camera.type
 
     if video_file:
         logger.info("Using video file camera: %s", video_file)
@@ -30,7 +31,13 @@ def create_camera(config: AppConfig, video_file: Optional[str] = None) -> Camera
             fps=config.camera.fps,
         )
 
-    if platform == "pi":
+    # Force USB camera if configured
+    if camera_type == "usb":
+        logger.info("Camera type set to 'usb', skipping Pi Camera detection")
+        return _create_usb_camera(config)
+
+    # Try Pi Camera if on Pi platform and not forced to USB
+    if platform == "pi" and camera_type in ("auto", "picamera"):
         try:
             from src.capture.camera import PiCamera
             logger.info("Using PiCamera2")
@@ -41,7 +48,35 @@ def create_camera(config: AppConfig, video_file: Optional[str] = None) -> Camera
         except ImportError:
             logger.warning("picamera2 not available, falling back to OpenCV")
 
-    logger.info("Using OpenCV camera (device 0)")
+    # Fall back to USB camera
+    return _create_usb_camera(config)
+
+
+def _create_usb_camera(config: AppConfig) -> CameraBase:
+    """Create USB camera with device detection."""
+    # Try USB webcam - device 1 first (common for USB webcams on Pi)
+    # then fall back to device 0
+    for device_id in [1, 0]:
+        logger.info("Trying OpenCV camera (device %d)", device_id)
+        try:
+            # Test if camera actually opens
+            import cv2
+            cap = cv2.VideoCapture(device_id)
+            if cap.isOpened():
+                cap.release()
+                logger.info("✅ Using OpenCV camera (device %d)", device_id)
+                return OpenCVCamera(
+                    device_id=device_id,
+                    resolution=config.camera.resolution,
+                    fps=config.camera.fps,
+                )
+            else:
+                logger.warning("Device %d not available", device_id)
+        except Exception as e:
+            logger.warning("Failed to open device %d: %s", device_id, e)
+
+    # If all fails, return device 0 anyway (will error later if truly unavailable)
+    logger.warning("No working camera found, defaulting to device 0")
     return OpenCVCamera(
         device_id=0,
         resolution=config.camera.resolution,

@@ -1,0 +1,102 @@
+╔════════════════════════════════════════════════════════════════════════╗
+║                   TRAFFIC-EYE QUICK REFERENCE                          ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+📷 CAMERA: OV5647 (Pi Camera Module v1) @ 640x480, 15 FPS
+🌐 DASHBOARD: http://100.107.114.5:8080
+✅ STATUS: Deployed & Running
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📱 ACCESS POINTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  iPad (Tailscale):  http://100.107.114.5:8080
+  Local Network:     http://192.168.68.63:8080
+  On Pi:             http://localhost:8080
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔧 COMMON COMMANDS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  View Logs:         sudo journalctl -u traffic-eye-dashboard -f
+  Restart Service:   sudo systemctl restart traffic-eye-dashboard
+  Check Status:      sudo systemctl status traffic-eye-dashboard
+  Stop Service:      sudo systemctl stop traffic-eye-dashboard
+  
+  Verify Camera:     bash scripts/verify_camera_deployment.sh
+  Check Power:       vcgencmd get_throttled
+  Check Temp:        vcgencmd measure_temp
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 SYSTEM HEALTH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Temperature:       40°C  ✅ Good (< 70°C)
+  CPU Usage:         ~85%  ✅ Normal
+  Memory:            28%   ✅ Good
+  Power Status:      ⚠️  0x50005 (Upgrade power supply recommended)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📁 KEY FILES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Config:            config/settings.yaml
+  Main Dashboard:    src/web/dashboard_camera.py
+  Camera Streamer:   src/web/camera_streamer.py
+  Service File:      /etc/systemd/system/traffic-eye-dashboard.service
+  
+  Documentation:
+    - DEPLOYMENT_SUMMARY.md      (This deployment overview)
+    - CAMERA_DEPLOYMENT.md        (Technical details)
+    - POWER_SUPPLY_GUIDE.md       (Power recommendations)
+    - CLAUDE.md                   (Project instructions)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 DETECTION FEATURES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ✅ YOLOv8n object detection (person, motorcycle, car, truck, bus, etc.)
+  ✅ Helmet classification for riders
+  ✅ Color-coded bounding boxes
+  ✅ Real-time FPS counter
+  ✅ Detection count overlay
+  ✅ Timestamp on frames
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚨 TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Camera not working:
+    dmesg | grep -i ov5647
+    python3 -c "from picamera2 import Picamera2; cam = Picamera2()"
+  
+  Dashboard not accessible:
+    sudo systemctl restart traffic-eye-dashboard
+    sudo journalctl -u traffic-eye-dashboard -n 50
+  
+  High CPU usage:
+    Edit config/settings.yaml → increase process_every_nth_frame
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚠️  IMPORTANT: Power Supply
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Current Status:  Past undervoltage detected (0x50005)
+  Recommendation:  Upgrade to official Pi 4 power supply (5V/3A)
+  Why:             Prevents SD card corruption, crashes, and instability
+  
+  See POWER_SUPPLY_GUIDE.md for details.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ DEPLOYMENT COMPLETE - System Ready for Testing!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Deployed: February 10, 2026, 01:11 IST

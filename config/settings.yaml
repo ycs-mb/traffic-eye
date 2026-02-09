@@ -1,8 +1,11 @@
 camera:
-  resolution: [1280, 720]
-  fps: 30
-  process_every_nth_frame: 5
+  resolution: [1280, 720]  # Full 720p resolution for USB webcam (full FOV)
+  fps: 30  # Camera supports 30 FPS at 720p with MJPEG
+  process_every_nth_frame: 5  # Process every 5th frame to maintain performance
   buffer_seconds: 10
+  # Camera type: "auto", "picamera", "usb"
+  # Set to "usb" to force USB webcam and skip Pi Camera detection
+  type: "usb"
 
 detection:
   model_path: "models/yolov8n_int8.tflite"

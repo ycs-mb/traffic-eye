@@ -24,6 +24,7 @@ class CameraConfig:
     fps: int = 30
     process_every_nth_frame: int = 5
     buffer_seconds: int = 10
+    type: str = "auto"  # "auto", "picamera", "usb"
 
 
 @dataclass(frozen=True)
