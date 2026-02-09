@@ -1,0 +1,71 @@
+# SSH Configuration
+# ~/.ssh/config
+
+# Global defaults
+Host *
+    # Use SSH2 protocol
+    Protocol 2
+
+    # Keep connections alive
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+
+    # Connection reuse for speed
+    ControlMaster auto
+    ControlPath /tmp/ssh-%r@%h:%p
+    ControlPersist 10m
+
+    # Forward SSH agent
+    ForwardAgent yes
+
+    # Compression
+    Compression yes
+
+    # Add keys to SSH agent
+    AddKeysToAgent yes
+
+    # Use keychain on macOS
+    UseKeychain yes
+
+    # Identity files (uncomment and customize)
+    # IdentityFile ~/.ssh/id_ed25519
+    # IdentityFile ~/.ssh/id_rsa
+
+# Example: GitHub
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519
+    PreferredAuthentications publickey
+
+# Example: GitLab
+Host gitlab.com
+    HostName gitlab.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519
+    PreferredAuthentications publickey
+
+# Example: Personal server
+# Host myserver
+#     HostName example.com
+#     User username
+#     Port 22
+#     IdentityFile ~/.ssh/id_ed25519
+
+# Example: Jump host (bastion)
+# Host internal-server
+#     HostName 10.0.0.5
+#     User username
+#     ProxyJump bastion.example.com
+
+# Example: AWS EC2
+# Host aws-*.compute.amazonaws.com
+#     User ec2-user
+#     IdentityFile ~/.ssh/aws-key.pem
+
+# Example: Short alias
+# Host dev
+#     HostName dev.example.com
+#     User developer
+#     Port 2222
+#     IdentityFile ~/.ssh/id_ed25519

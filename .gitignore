@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment
+.env
+.env.local
+
+# Data (large/generated files)
+data/evidence/*
+!data/evidence/.gitkeep
+data/queue/*
+!data/queue/.gitkeep
+data/logs/*
+!data/logs/.gitkeep
+data/captures/*
+!data/captures/.gitkeep
+data/*.db
+data/*.db-*
+data/helmet_dataset/
+
+# Models (binary files)
+models/*.tflite
+models/ocr/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Claude Code
+.claude/

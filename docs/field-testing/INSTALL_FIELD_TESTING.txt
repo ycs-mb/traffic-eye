@@ -1,0 +1,129 @@
+================================================================================
+  TRAFFIC-EYE FIELD TESTING - INSTALLATION GUIDE
+================================================================================
+
+GOAL: Plug-and-play field testing with iPad monitoring
+
+HARDWARE NEEDED (Minimum ₹7,500):
+  ✓ Raspberry Pi 4 (4GB) - Already have
+  ✓ Power bank (26800mAh, 5V/3A USB-C) - ₹2,500
+  ✓ Pi Camera Module v2 - ₹2,000
+  ✓ VK-162 USB GPS module - ₹1,000
+  ✓ SanDisk Extreme 64GB microSD - ₹1,000
+  ✓ Pi case with fan - ₹1,000
+
+INSTALLATION (Run on Raspberry Pi):
+
+  cd /home/yashcs/traffic-eye
+  bash scripts/deploy_field_testing.sh
+
+  This will:
+    1. Install dependencies (gpsd, camera tools, etc.)
+    2. Setup Python environment
+    3. Configure GPS and camera
+    4. Install Tailscale VPN
+    5. Setup auto-start services
+    6. Create data directories
+    7. Setup automatic cleanup (cron)
+
+  Time: 10-15 minutes
+
+AFTER INSTALLATION:
+
+  1. Setup Tailscale VPN:
+       sudo tailscale up
+       (Follow authentication URL)
+
+  2. Get Tailscale IP (save this for iPad):
+       tailscale ip -4
+
+  3. Install Tailscale on iPad (App Store)
+       - Sign in with same account
+       - Connect VPN
+
+  4. Start services:
+       sudo systemctl start traffic-eye-field
+       sudo systemctl start traffic-eye-dashboard
+
+  5. Access dashboard from iPad Safari:
+       http://<tailscale-ip>:8080
+
+  6. Test auto-start:
+       sudo reboot
+       (Services should start automatically)
+
+FIELD TESTING WORKFLOW:
+
+  1. Connect power → Wait 60 seconds
+  2. iPad: Connect to Tailscale VPN
+  3. Open dashboard: http://<tailscale-ip>:8080
+  4. Verify: Service active, GPS fix, camera running
+  5. Start testing!
+
+MONITORING FROM iPAD:
+
+  • Web Dashboard: http://<tailscale-ip>:8080
+    - System metrics (CPU, memory, temp, disk)
+    - Service status and uptime
+    - Live logs
+    - Restart button
+
+  • SSH Access (Termius/Blink Shell):
+    - ssh yashcs@<tailscale-ip>
+    - View logs: journalctl -u traffic-eye-field -f
+    - Check GPS: cgps
+    - Check power: vcgencmd measure_temp
+
+DOCUMENTATION:
+
+  • FIELD_DEPLOYMENT_COMPLETE.md - Complete deployment guide
+  • FIELD_TESTING_CHECKLIST.md - Pre-flight and testing checklist
+  • FIELD_QUICK_REFERENCE.md - Printable quick reference card
+
+TROUBLESHOOTING:
+
+  Service won't start:
+    sudo systemctl status traffic-eye-field
+    journalctl -u traffic-eye-field -n 50
+
+  Dashboard not accessible:
+    sudo systemctl restart traffic-eye-dashboard
+    tailscale status
+
+  GPS not working:
+    cgps  (wait 1-5 minutes for fix)
+    sudo systemctl restart gpsd
+
+  Camera not detected:
+    vcgencmd get_camera
+    libcamera-hello --list-cameras
+
+SAFE SHUTDOWN:
+
+  sudo systemctl stop traffic-eye-field
+  sudo shutdown -h now
+  (Wait 30 seconds, then unplug power)
+
+SUCCESS CRITERIA:
+
+  ✓ System runs 2+ hours without crashes
+  ✓ GPS maintains stable fix
+  ✓ Camera captures at 15 FPS
+  ✓ Helmet detection accuracy > 70%
+  ✓ Dashboard accessible throughout
+  ✓ Temperature < 80°C
+  ✓ No power warnings
+
+READY TO START:
+
+  1. Run: bash scripts/deploy_field_testing.sh
+  2. Setup Tailscale VPN
+  3. Connect hardware (camera, GPS, power)
+  4. Start services
+  5. Test from iPad
+  6. Go to field!
+
+================================================================================
+Version: 1.0 (2026-02-09)
+Status: READY FOR DEPLOYMENT
+================================================================================

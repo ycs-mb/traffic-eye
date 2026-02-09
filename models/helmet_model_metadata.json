@@ -1,0 +1,121 @@
+{
+  "model_name": "helmet_cls_int8",
+  "version": "1.0.0",
+  "architecture": "MobileNetV3-Small",
+  "description": "Binary helmet classifier for motorcycle riders in Indian traffic conditions",
+  "source": "Transfer learning from ImageNet-pretrained MobileNetV3-Small, trained on Raspberry Pi 4",
+  "training_info": {
+    "framework": "TensorFlow 2.20.0 / Keras 3.13",
+    "base_model": "MobileNetV3-Small (ImageNet pretrained, frozen backbone)",
+    "training_method": "Transfer learning: frozen MobileNetV3-Small backbone -> GlobalAvgPool -> Dropout(0.3) -> Dense(64,relu) -> Dropout(0.2) -> Dense(1,sigmoid)",
+    "quantization": "Post-training float16 quantization (weights and activations in float16, ~50% size reduction, no accuracy loss)",
+    "quantization_note": "Full INT8 quantization was attempted but collapsed model outputs due to hard-swish activation incompatibility. Float16 provides equivalent speed benefits on ARM without accuracy loss.",
+    "training_date": "2026-02-09",
+    "training_platform": "Raspberry Pi 4 (aarch64, 4GB RAM)",
+    "epochs": 40,
+    "learning_rate": 0.001,
+    "batch_size": 16,
+    "optimizer": "Adam",
+    "loss": "binary_crossentropy",
+    "early_stopping": "patience=10, restore_best_weights=True",
+    "dataset_info": {
+      "type": "Synthetic head crops generated with OpenCV drawing primitives",
+      "train_count": "300 per class (helmet + no_helmet = 600 total)",
+      "val_count": "60 per class (120 total)",
+      "test_count": "10 per class (20 total)",
+      "features": "Varied skin tones, helmet colors, backgrounds, lighting, noise",
+      "note": "Retrain with real data from Kaggle/RoboFlow for production accuracy",
+      "recommended_real_datasets": [
+        "RoboFlow: Helmet and No Helmet Rider Detection (universe.roboflow.com)",
+        "Kaggle: Indian Helmet Detection Dataset (kaggle.com/datasets/andrewmvd/helmet-detection)",
+        "GitHub: Safety-Helmet-Wearing-Dataset (github.com/njvisionpower/Safety-Helmet-Wearing-Dataset)"
+      ]
+    }
+  },
+  "model_specs": {
+    "input_format": {
+      "shape": [1, 96, 96, 3],
+      "dtype": "float32",
+      "range": "[0.0, 1.0] (divide raw uint8 pixels by 255.0)",
+      "color_space": "BGR (from OpenCV) or RGB"
+    },
+    "output_format": {
+      "shape": [1, 1],
+      "dtype": "float32",
+      "activation": "sigmoid",
+      "interpretation": "Score > 0.5 = helmet present, < 0.5 = no helmet"
+    },
+    "model_size_bytes": 1976700,
+    "model_size_kb": 1930.4,
+    "total_parameters": 976113
+  },
+  "test_results": {
+    "accuracy": 1.0,
+    "total_images": 20,
+    "correct": 20,
+    "avg_inference_ms": 71.4,
+    "p95_inference_ms": 102.7,
+    "test_date": "2026-02-09T15:15:50",
+    "platform": "Raspberry Pi 4 (aarch64)",
+    "helmet_score_range": "0.51 - 0.94 (all correctly classified)",
+    "no_helmet_score_range": "0.25 - 0.47 (all correctly classified)",
+    "per_image": [
+      {"file": "helmet_0000.jpg", "expected": "helmet", "predicted": "helmet", "score": 0.9399, "correct": true, "ms": 30.2},
+      {"file": "helmet_0001.jpg", "expected": "helmet", "predicted": "helmet", "score": 0.6784, "correct": true, "ms": 67.5},
+      {"file": "helmet_0002.jpg", "expected": "helmet", "predicted": "helmet", "score": 0.7348, "correct": true, "ms": 91.2},
+      {"file": "helmet_0003.jpg", "expected": "helmet", "predicted": "helmet", "score": 0.5953, "correct": true, "ms": 71.9},
+      {"file": "helmet_0004.jpg", "expected": "helmet", "predicted": "helmet", "score": 0.5151, "correct": true, "ms": 74.5},
+      {"file": "helmet_0005.jpg", "expected": "helmet", "predicted": "helmet", "score": 0.7753, "correct": true, "ms": 93.6},
+      {"file": "helmet_0006.jpg", "expected": "helmet", "predicted": "helmet", "score": 0.8482, "correct": true, "ms": 75.8},
+      {"file": "helmet_0007.jpg", "expected": "helmet", "predicted": "helmet", "score": 0.8501, "correct": true, "ms": 101.4},
+      {"file": "helmet_0008.jpg", "expected": "helmet", "predicted": "helmet", "score": 0.7358, "correct": true, "ms": 92.7},
+      {"file": "helmet_0009.jpg", "expected": "helmet", "predicted": "helmet", "score": 0.9094, "correct": true, "ms": 71.2},
+      {"file": "no_helmet_0000.jpg", "expected": "no_helmet", "predicted": "no_helmet", "score": 0.263, "correct": true, "ms": 75.4},
+      {"file": "no_helmet_0001.jpg", "expected": "no_helmet", "predicted": "no_helmet", "score": 0.3736, "correct": true, "ms": 38.7},
+      {"file": "no_helmet_0002.jpg", "expected": "no_helmet", "predicted": "no_helmet", "score": 0.2472, "correct": true, "ms": 76.5},
+      {"file": "no_helmet_0003.jpg", "expected": "no_helmet", "predicted": "no_helmet", "score": 0.4535, "correct": true, "ms": 71.6},
+      {"file": "no_helmet_0004.jpg", "expected": "no_helmet", "predicted": "no_helmet", "score": 0.4149, "correct": true, "ms": 126.9},
+      {"file": "no_helmet_0005.jpg", "expected": "no_helmet", "predicted": "no_helmet", "score": 0.4517, "correct": true, "ms": 87.5},
+      {"file": "no_helmet_0006.jpg", "expected": "no_helmet", "predicted": "no_helmet", "score": 0.353, "correct": true, "ms": 75.5},
+      {"file": "no_helmet_0007.jpg", "expected": "no_helmet", "predicted": "no_helmet", "score": 0.2458, "correct": true, "ms": 75.7},
+      {"file": "no_helmet_0008.jpg", "expected": "no_helmet", "predicted": "no_helmet", "score": 0.4443, "correct": true, "ms": 18.8},
+      {"file": "no_helmet_0009.jpg", "expected": "no_helmet", "predicted": "no_helmet", "score": 0.469, "correct": true, "ms": 11.7}
+    ]
+  },
+  "deployment": {
+    "file_path": "models/helmet_cls_int8.tflite",
+    "config_section": "helmet.model_path",
+    "runtime": "ai-edge-litert 2.1.2",
+    "op_resolver": "BUILTIN_WITHOUT_DEFAULT_DELEGATES (required to avoid XNNPACK failure on hard-swish ops)",
+    "dependencies": [
+      "ai-edge-litert (pip install ai-edge-litert)",
+      "opencv-python-headless (for image resizing)",
+      "numpy"
+    ]
+  },
+  "usage": {
+    "confidence_threshold": 0.5,
+    "recommended_range": [0.4, 0.6],
+    "tuning_guidance": {
+      "high_precision": "Use threshold 0.6 to reduce false positives",
+      "high_recall": "Use threshold 0.4 to catch more violations",
+      "balanced": "Use threshold 0.5 (default)"
+    }
+  },
+  "known_limitations": [
+    "Trained on synthetic data - retrain with real helmet images for production deployment",
+    "XNNPACK delegate incompatible with this model - must use BUILTIN_WITHOUT_DEFAULT_DELEGATES",
+    "Full INT8 quantization collapses model outputs due to MobileNetV3 hard-swish activation",
+    "Float16 quantization used instead - equivalent performance on ARM, no accuracy loss",
+    "Model input is float32 [0,1] range, NOT uint8 - caller must normalize"
+  ],
+  "maintenance": {
+    "last_updated": "2026-02-09",
+    "update_frequency": "Quarterly or when accuracy degrades",
+    "retraining_triggers": [
+      "Accuracy drops below 85% on real-world validation",
+      "Deployment region changes",
+      "New helmet types become prevalent"
+    ]
+  }
+}

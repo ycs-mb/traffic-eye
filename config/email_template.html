@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; color: #333; }
+        .header { background: #d32f2f; color: white; padding: 15px; border-radius: 5px 5px 0 0; }
+        .content { border: 1px solid #ddd; border-top: none; padding: 20px; border-radius: 0 0 5px 5px; }
+        .field { margin: 10px 0; }
+        .label { font-weight: bold; color: #555; }
+        .value { margin-left: 10px; }
+        .confidence { padding: 3px 8px; border-radius: 3px; color: white; font-size: 0.9em; }
+        .conf-high { background: #4caf50; }
+        .conf-medium { background: #ff9800; }
+        .conf-low { background: #f44336; }
+        .disclaimer { margin-top: 20px; padding: 10px; background: #fff3e0; border-left: 4px solid #ff9800; font-size: 0.85em; }
+        .map-link { color: #1976d2; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Traffic Violation Report</h2>
+        <p>Violation ID: {{ violation_id }}</p>
+    </div>
+    <div class="content">
+        <div class="field">
+            <span class="label">Violation Type:</span>
+            <span class="value">{{ violation_type }}</span>
+        </div>
+        <div class="field">
+            <span class="label">Date & Time (IST):</span>
+            <span class="value">{{ timestamp_ist }}</span>
+        </div>
+        <div class="field">
+            <span class="label">Location:</span>
+            <span class="value">
+                {% if gps_lat and gps_lon %}
+                    {% if location_address %}
+                        {{ location_address }}<br>
+                        <span style="color: #888; font-size: 0.9em;">({{ gps_lat }}, {{ gps_lon }})</span>
+                    {% else %}
+                        {{ gps_lat }}, {{ gps_lon }}
+                    {% endif %}
+                    <br>
+                    <a href="{{ maps_url }}" class="map-link">View on Google Maps</a>
+                {% else %}
+                    GPS data unavailable
+                {% endif %}
+            </span>
+        </div>
+        {% if plate_text %}
+        <div class="field">
+            <span class="label">License Plate:</span>
+            <span class="value">{{ plate_text }}</span>
+            <span class="confidence {% if plate_confidence >= 0.9 %}conf-high{% elif plate_confidence >= 0.7 %}conf-medium{% else %}conf-low{% endif %}">
+                {{ "%.0f"|format(plate_confidence * 100) }}% confidence
+            </span>
+        </div>
+        {% endif %}
+        <div class="field">
+            <span class="label">Overall Confidence:</span>
+            <span class="confidence {% if overall_confidence >= 0.96 %}conf-high{% elif overall_confidence >= 0.7 %}conf-medium{% else %}conf-low{% endif %}">
+                {{ "%.1f"|format(overall_confidence * 100) }}%
+            </span>
+        </div>
+        {% if cloud_verified %}
+        <div class="field">
+            <span class="label">Cloud Verification:</span>
+            <span class="value">Verified by {{ cloud_provider }}</span>
+        </div>
+        {% endif %}
+
+        <div class="disclaimer">
+            <strong>Disclaimer:</strong> This is a potential traffic violation detected by an automated system.
+            The evidence is submitted for review and should not be treated as a definitive accusation.
+            All confidence scores are provided for transparency. Human review is recommended before
+            any enforcement action.
+        </div>
+    </div>
+</body>
+</html>

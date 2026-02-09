@@ -1,0 +1,16 @@
+[Unit]
+Description=Run Traffic-Eye sender every 5 minutes
+Documentation=https://github.com/traffic-eye/traffic-eye
+
+[Timer]
+# Wait 2 minutes after boot before first run
+OnBootSec=2min
+# Then run every 5 minutes
+OnUnitActiveSec=5min
+# Persist timer state across reboots so missed runs are caught up
+Persistent=true
+# Add randomized delay to avoid thundering herd with multiple units
+RandomizedDelaySec=30
+
+[Install]
+WantedBy=timers.target

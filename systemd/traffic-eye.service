@@ -1,0 +1,72 @@
+[Unit]
+Description=Traffic-Eye Violation Detection System
+Documentation=https://github.com/traffic-eye/traffic-eye
+After=network.target gpsd.service multi-user.target
+Wants=gpsd.service
+# Give camera subsystem time to initialize
+After=camera.service
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Service]
+Type=notify
+User=yashcs
+Group=yashcs
+WorkingDirectory=/opt/traffic-eye
+ExecStart=/opt/traffic-eye/venv/bin/python -m src.main --config config/settings_pi.yaml
+ExecReload=/bin/kill -HUP $MAINPID
+
+# Watchdog: service must notify systemd within this interval or be restarted
+WatchdogSec=30
+NotifyAccess=all
+
+# Restart policy
+Restart=on-failure
+RestartSec=10
+TimeoutStartSec=60
+TimeoutStopSec=30
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=traffic-eye
+
+# Environment
+Environment=PYTHONUNBUFFERED=1
+Environment=TRAFFIC_EYE_CONFIG=/opt/traffic-eye/config/settings_pi.yaml
+EnvironmentFile=-/etc/traffic-eye.env
+
+# Resource limits
+MemoryMax=2G
+MemoryHigh=1536M
+CPUQuota=90%
+TasksMax=64
+LimitNOFILE=4096
+
+# Security hardening
+ProtectSystem=strict
+ReadWritePaths=/var/lib/traffic-eye /var/log/traffic-eye
+ReadOnlyPaths=/opt/traffic-eye
+ProtectHome=true
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+RemoveIPC=true
+RestrictNamespaces=true
+SystemCallArchitectures=native
+
+# Allow access to camera and GPIO devices
+SupplementaryGroups=video gpio i2c dialout
+DeviceAllow=/dev/video* rw
+DeviceAllow=/dev/vchiq rw
+DeviceAllow=/dev/gpiomem rw
+DeviceAllow=/dev/i2c-* rw
+DeviceAllow=/dev/ttyAMA* rw
+DeviceAllow=/dev/ttyS* rw
+
+[Install]
+WantedBy=multi-user.target

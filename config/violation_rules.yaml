@@ -1,0 +1,25 @@
+rules:
+  no_helmet:
+    enabled: true
+    min_consecutive_frames: 3
+    confidence_threshold: 0.85
+    required_detections:
+      - motorcycle
+      - person
+    description: "Riding motorcycle without helmet"
+
+  red_light_jump:
+    enabled: true
+    min_consecutive_frames: 5
+    confidence_threshold: 0.80
+    required_detections:
+      - vehicle
+      - traffic_light_red
+    description: "Jumping red traffic signal"
+
+  wrong_side:
+    enabled: true
+    min_duration_seconds: 3
+    confidence_threshold: 0.70
+    gps_heading_deviation_degrees: 120
+    description: "Driving on wrong side of road"

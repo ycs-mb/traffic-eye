@@ -1,0 +1,14 @@
+[Unit]
+Description=Traffic-Eye Web Dashboard
+After=network.target
+
+[Service]
+Type=simple
+User=yashcs
+WorkingDirectory=/home/yashcs/traffic-eye
+ExecStart=/home/yashcs/traffic-eye/venv/bin/python src/web/dashboard.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

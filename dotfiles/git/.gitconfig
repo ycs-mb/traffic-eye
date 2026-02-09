@@ -1,0 +1,85 @@
+[user]
+	name = Your Name
+	email = your.email@example.com
+
+[core]
+	editor = vim
+	excludesfile = ~/.gitignore_global
+	autocrlf = input
+	# Use custom `.gitignore` and `.gitattributes`
+	attributesfile = ~/.gitattributes
+
+[color]
+	ui = auto
+	branch = auto
+	diff = auto
+	status = auto
+
+[color "branch"]
+	current = yellow reverse
+	local = yellow
+	remote = green
+
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = cyan
+
+[alias]
+	# Short aliases
+	st = status
+	co = checkout
+	br = branch
+	ci = commit
+	cp = cherry-pick
+
+	# Logging
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	last = log -1 HEAD
+
+	# Diff
+	df = diff
+	dc = diff --cached
+
+	# Undo
+	undo = reset --soft HEAD^
+	unstage = reset HEAD --
+
+	# Clean
+	cleanup = !git branch --merged | grep -v '\\*\\|main\\|master\\|develop' | xargs -n 1 git branch -d
+
+	# Stats
+	contributors = shortlog --summary --numbered
+
+[push]
+	default = simple
+	autoSetupRemote = true
+
+[pull]
+	rebase = false
+
+[init]
+	defaultBranch = main
+
+[diff]
+	tool = vimdiff
+	compactionHeuristic = true
+
+[merge]
+	tool = vimdiff
+	conflictstyle = diff3
+
+[fetch]
+	prune = true
+
+[rerere]
+	enabled = true
+
+[help]
+	autocorrect = 1

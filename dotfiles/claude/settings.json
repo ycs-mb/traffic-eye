@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "mode": "ask"
+  },
+  "model": "sonnet",
+  "alwaysThinkingEnabled": true,
+  "editor": "vim",
+  "terminalShell": "/bin/zsh",
+  "promptCaching": true,
+  "telemetry": false,
+  "effortLevel": "medium",
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  }
+}

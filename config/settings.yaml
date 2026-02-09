@@ -1,0 +1,84 @@
+camera:
+  resolution: [1280, 720]
+  fps: 30
+  process_every_nth_frame: 5
+  buffer_seconds: 10
+
+detection:
+  model_path: "models/yolov8n_int8.tflite"
+  confidence_threshold: 0.5
+  nms_threshold: 0.45
+  num_threads: 4
+  target_classes:
+    - person
+    - motorcycle
+    - car
+    - truck
+    - bus
+    - bicycle
+    - traffic light
+
+helmet:
+  model_path: "models/helmet_cls_int8.tflite"
+  confidence_threshold: 0.85
+
+ocr:
+  engine: "cloud_only"  # Use Vertex AI for all plate reading
+  confidence_threshold: 0.7
+  cloud_only: true  # Skip local OCR entirely
+
+violations:
+  cooldown_seconds: 30
+  max_reports_per_hour: 20
+
+gps:
+  enabled: true
+  required: false
+  speed_gate_kmh: 5
+  # GPS source: "auto" (platform-based), "network" (phone app), "gpsd", "mock"
+  source: "network"
+  # Network GPS settings (for phone GPS apps sending NMEA over WiFi)
+  network_host: "0.0.0.0"
+  network_port: 10110
+  network_protocol: "udp"
+
+reporting:
+  evidence_dir: "data/evidence"
+  queue_dir: "data/queue"
+  best_frames_count: 3
+  clip_before_seconds: 2
+  clip_after_seconds: 3
+  email:
+    smtp_host: "smtp.gmail.com"
+    smtp_port: 587
+    use_tls: true
+    sender: ""
+    password_env: "TRAFFIC_EYE_EMAIL_PASSWORD"
+    recipients: []
+
+cloud:
+  provider: "gemini"  # Use Gemini API (simpler, has free tier)
+  api_key_env: "TRAFFIC_EYE_CLOUD_API_KEY"
+  confidence_threshold: 0.90  # Lower threshold for better plate detection
+  max_retries: 3
+  timeout_seconds: 30
+  # Vertex AI specific settings (not used with gemini provider)
+  gcp_project_id: "gcloud-photo-project"
+  gcp_location: "us-central1"
+
+storage:
+  max_usage_percent: 80
+  evidence_retention_days: 30
+  non_violation_retention_hours: 1
+
+thermal:
+  throttle_temp_c: 75
+  pause_temp_c: 80
+  pause_duration_seconds: 30
+
+logging:
+  level: "INFO"
+  json_format: false
+  log_dir: "data/logs"
+
+platform: "auto"

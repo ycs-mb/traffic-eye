@@ -1,0 +1,54 @@
+[Unit]
+Description=Traffic-Eye Email and Cloud Verification Sender
+Documentation=https://github.com/traffic-eye/traffic-eye
+After=network-online.target
+Wants=network-online.target
+# Do not start if main service has never run (no database yet)
+ConditionPathExists=/var/lib/traffic-eye/db
+
+[Service]
+Type=oneshot
+User=yashcs
+Group=yashcs
+WorkingDirectory=/opt/traffic-eye
+
+ExecStart=/opt/traffic-eye/venv/bin/python -c "\
+from src.config import load_config; \
+from src.utils.database import Database; \
+from src.reporting.sender import EmailSender; \
+c = load_config('config/settings_pi.yaml'); \
+db = Database('/var/lib/traffic-eye/db/traffic_eye.db'); \
+EmailSender(c, db).process_queue(); \
+db.close()"
+
+# Timeout: allow up to 5 minutes for cloud API calls
+TimeoutStartSec=300
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=traffic-eye-sender
+
+# Environment
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=-/etc/traffic-eye.env
+
+# Security hardening
+ProtectSystem=strict
+ReadWritePaths=/var/lib/traffic-eye /var/log/traffic-eye
+ReadOnlyPaths=/opt/traffic-eye
+ProtectHome=true
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+RemoveIPC=true
+
+# Network access required for email/cloud
+PrivateNetwork=false
+
+[Install]
+WantedBy=multi-user.target

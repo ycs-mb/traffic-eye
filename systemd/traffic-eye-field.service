@@ -1,0 +1,37 @@
+[Unit]
+Description=Traffic-Eye Field Testing (Auto-Start)
+Documentation=https://github.com/traffic-eye/traffic-eye
+After=network-online.target gpsd.service
+Wants=network-online.target gpsd.service
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=yashcs
+Group=yashcs
+WorkingDirectory=/home/yashcs/traffic-eye
+ExecStart=/home/yashcs/traffic-eye/venv/bin/python -m src.main
+Restart=always
+RestartSec=10
+TimeoutStartSec=60
+TimeoutStopSec=30
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=traffic-eye
+
+# Environment
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=-/etc/traffic-eye.env
+
+# Resource limits (relaxed for field testing)
+MemoryMax=3G
+CPUQuota=95%
+
+# Allow access to devices
+SupplementaryGroups=video gpio i2c dialout
+
+[Install]
+WantedBy=multi-user.target
