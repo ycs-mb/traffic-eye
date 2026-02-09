@@ -51,3 +51,6 @@ htmlcov/
 
 # Claude Code
 .claude/
+
+# Antigravity Agent
+.agent/
