@@ -29,7 +29,7 @@ import json
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Tuple
+
 
 import tensorflow as tf
 from tensorflow import keras
@@ -351,7 +351,7 @@ def main() -> None:
     model_name = f"helmet_model_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
     logger.info(f"Starting training: {model_name}")
 
-    history = model.fit(
+    _ = model.fit(
         train_dataset,
         validation_data=val_dataset,
         epochs=args.epochs,

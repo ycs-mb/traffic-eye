@@ -31,7 +31,7 @@ def test_camera_device(device_id):
     fps = cap.get(cv2.CAP_PROP_FPS)
     backend = cap.getBackendName()
 
-    print(f"✅ Camera opened successfully")
+    print("✅ Camera opened successfully")
     print(f"   Backend: {backend}")
     print(f"   Resolution: {width}x{height}")
     print(f"   FPS: {fps}")
@@ -83,8 +83,8 @@ def main():
     if working_devices:
         print(f"\n✅ Working camera devices: {working_devices}")
         print(f"\n📝 Recommended device: /dev/video{working_devices[0]}")
-        print(f"\nTo use this camera, the system will automatically fall back to")
-        print(f"OpenCV VideoCapture since Picamera2 is not available.")
+        print("\nTo use this camera, the system will automatically fall back to")
+        print("OpenCV VideoCapture since Picamera2 is not available.")
         return 0
     else:
         print("\n❌ No working camera devices found!")

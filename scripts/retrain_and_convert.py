@@ -191,7 +191,7 @@ def evaluate_model(model_path: Path) -> dict:
             output = interpreter.get_tensor(out["index"])
             score = float(output[0][0])
             predicted_helmet = score > 0.5
-            confidence = score if predicted_helmet else 1.0 - score
+
             correct = predicted_helmet == expected_helmet
 
             results["total"] += 1

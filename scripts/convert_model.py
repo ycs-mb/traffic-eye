@@ -252,7 +252,7 @@ def validate_tflite_model(
     avg_diff = np.mean(differences)
     max_diff = np.max(differences)
 
-    logger.info(f"Validation complete:")
+    logger.info("Validation complete:")
     logger.info(f"  Average difference: {avg_diff:.6f}")
     logger.info(f"  Maximum difference: {max_diff:.6f}")
 
@@ -303,10 +303,10 @@ def main() -> None:
         validate_tflite_model(output_path, args.model, calibration_images)
 
     logger.info("Conversion complete!")
-    logger.info(f"\nTo use this model, update your config:")
-    logger.info(f"  helmet:")
+    logger.info("\nTo use this model, update your config:")
+    logger.info("  helmet:")
     logger.info(f"    model_path: {output_path}")
-    logger.info(f"    enabled: true")
+    logger.info("    enabled: true")
 
 
 if __name__ == "__main__":

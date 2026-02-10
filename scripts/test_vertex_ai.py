@@ -64,11 +64,13 @@ def check_vertex_ai_sdk():
     """Check if Vertex AI SDK is installed."""
     logger.info("Checking Vertex AI SDK...")
 
+    import importlib.util
     try:
-        import google.cloud.aiplatform
-        import vertexai.preview.generative_models
-        logger.info("✅ Vertex AI SDK installed")
-        return True
+        if importlib.util.find_spec("google.cloud.aiplatform") and importlib.util.find_spec("vertexai"):
+            logger.info("✅ Vertex AI SDK installed")
+            return True
+        else:
+            raise ImportError("Vertex AI SDK found but modules missing")
     except ImportError as e:
         logger.error(f"❌ Vertex AI SDK not installed: {e}")
         logger.error("Install with: pip install google-cloud-aiplatform")
@@ -101,7 +103,7 @@ def test_gemini_model():
     try:
         from vertexai.generative_models import GenerativeModel
 
-        model = GenerativeModel("gemini-1.5-flash")
+        _ = GenerativeModel("gemini-1.5-flash")
         logger.info("✅ Gemini 1.5 Flash model available")
         return True
 

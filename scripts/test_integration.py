@@ -3,13 +3,13 @@
 
 import sys
 import os
-sys.path.insert(0, '/home/yashcs/traffic-eye')
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import cv2
 import numpy as np
 from src.config import load_config
-from src.detection.tracker import IOUTracker
-from src.capture.buffer import CircularFrameBuffer
+
 from src.platform_factory import create_detector, create_helmet_classifier
 from src.violation.rules import RuleEngine
 from src.ocr.gemini_ocr import GeminiOCR
@@ -66,8 +66,8 @@ def test_violation_rules():
     """Test violation rule engine."""
     print("Testing violation rules...")
 
-    rule_engine = RuleEngine(speed_gate_kmh=5.0, max_reports_per_hour=20)
-    print(f"✅ Rule engine initialized")
+    _ = RuleEngine(speed_gate_kmh=5.0, max_reports_per_hour=20)
+    print("✅ Rule engine initialized")
     return True
 
 def main():

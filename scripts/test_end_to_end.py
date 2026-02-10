@@ -19,7 +19,7 @@ import logging
 import os
 import sys
 import time
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
@@ -34,13 +34,10 @@ from src.config import AppConfig, load_config
 from src.detection.detector import TFLiteDetector
 from src.detection.tracker import IOUTracker
 from src.models import (
-    BoundingBox,
-    Detection,
     FrameData,
     GPSReading,
     SignalState,
     ViolationCandidate,
-    ViolationType,
 )
 from src.ocr.gemini_ocr import GeminiOCR
 from src.ocr.validators import process_plate

@@ -174,7 +174,6 @@ def generate_synthetic_helmet_images(output_dir: Path, count: int = 200) -> None
 
 def build_model_tf():
     """Build MobileNetV3-Small binary classifier using TensorFlow/Keras."""
-    import tensorflow as tf
     from tensorflow import keras
     from tensorflow.keras import layers
 
@@ -510,7 +509,7 @@ def main():
     train_ds = load_dataset_tf(dataset_dir, "train")
     val_ds = load_dataset_tf(dataset_dir, "val")
 
-    history = train_model(model, train_ds, val_ds)
+    _ = train_model(model, train_ds, val_ds)
 
     # Step 3: Get calibration images for INT8 conversion
     logger.info("\n--- Step 3: Converting to TFLite INT8 ---")
