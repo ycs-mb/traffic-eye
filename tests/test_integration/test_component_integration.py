@@ -24,7 +24,7 @@ from src.models import (
 from src.reporting.evidence import EvidencePackager
 from src.reporting.report import ReportGenerator
 from src.utils.database import Database
-from src.violation.rules import RuleEngine, NoHelmetRule
+from src.violation.rules import RuleEngine
 
 
 @pytest.fixture
@@ -69,7 +69,7 @@ def temp_db():
     # Cleanup
     try:
         os.unlink(db_path)
-    except:
+    except Exception:
         pass
 
 

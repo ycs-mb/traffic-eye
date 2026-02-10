@@ -3,12 +3,10 @@
 from __future__ import annotations
 
 import logging
-from typing import Optional
 
 import httpx
 
 from src.config import AppConfig
-from src.models import EvidencePacket
 from src.utils.database import Database
 
 logger = logging.getLogger(__name__)

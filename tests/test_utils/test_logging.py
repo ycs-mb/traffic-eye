@@ -1,7 +1,6 @@
 """Tests for logging configuration."""
 
 import logging
-from pathlib import Path
 
 from src.utils.logging_config import setup_logging
 

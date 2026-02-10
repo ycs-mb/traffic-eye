@@ -3,17 +3,13 @@
 from __future__ import annotations
 
 import logging
-import math
 import time
 from abc import ABC, abstractmethod
-from datetime import datetime, timezone
 from typing import Optional
 
 from src.models import (
     BoundingBox,
-    Detection,
     FrameData,
-    GPSReading,
     SignalState,
     ViolationCandidate,
     ViolationType,
@@ -74,7 +70,7 @@ class NoHelmetRule(ViolationRule):
         violations = []
         motorcycles = [d for d in frame_data.detections if d.bbox.class_name == "motorcycle"]
         persons = [d for d in frame_data.detections if d.bbox.class_name == "person"]
-        helmet_classifier = context.get("helmet_classifier")
+        context.get("helmet_classifier")
 
         for moto in motorcycles:
             for person in persons:

@@ -7,12 +7,16 @@ import json
 import logging
 import time
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
 import httpx
 
 from src.config import AppConfig
 from src.models import EvidencePacket
+
+if TYPE_CHECKING:
+    from src.cloud.queue import CloudQueue
+    from src.utils.database import Database
 
 logger = logging.getLogger(__name__)
 

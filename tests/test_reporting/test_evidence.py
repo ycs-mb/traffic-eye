@@ -1,10 +1,9 @@
 """Tests for evidence packaging."""
 
 import tempfile
-import uuid
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import Mock, patch
 
 import cv2
 import numpy as np
@@ -276,7 +275,7 @@ class TestEvidencePackager:
         for bf in sample_frames:
             buffer.push(bf.frame, bf.timestamp, bf.frame_id)
 
-        packet = packager.package(sample_violation, buffer)
+        packager.package(sample_violation, buffer)
 
         # Should have tried both methods
         assert mock_run.call_count == 2

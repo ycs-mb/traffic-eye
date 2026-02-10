@@ -250,9 +250,9 @@ class EmailSender:
 
         # Create minimal evidence packet for report generation
         from src.models import (
-            ViolationCandidate, ViolationType, EvidencePacket, GPSReading
+            ViolationCandidate, ViolationType, GPSReading
         )
-        from datetime import datetime, timezone
+        from datetime import datetime
 
         vtype = ViolationType(violation["type"])
         timestamp = datetime.fromisoformat(violation["timestamp"])

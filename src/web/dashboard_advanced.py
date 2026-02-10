@@ -7,13 +7,11 @@ Real-time AI monitoring with comprehensive metrics and debug capabilities
 from flask import Flask, render_template_string, jsonify, Response, request
 import subprocess
 import psutil
-import os
 import cv2
 import sys
 sys.path.insert(0, '/home/yashcs/traffic-eye')
 
 from datetime import datetime
-from pathlib import Path
 from collections import deque
 import threading
 import time
@@ -1011,7 +1009,7 @@ def get_cpu_temp():
                                 capture_output=True, text=True, timeout=2)
         temp = result.stdout.strip().split('=')[1].split("'")[0]
         return temp
-    except:
+    except Exception:
         return "N/A"
 
 @app.route('/')
@@ -1071,7 +1069,6 @@ def api_metrics():
 @app.route('/api/debug/toggle', methods=['POST'])
 def toggle_debug():
     """Toggle debug mode on/off."""
-    import json
     data = json.loads(request.data) if request.data else {}
     camera_streamer.debug_mode = data.get('enabled', False)
     return jsonify({'debug_mode': camera_streamer.debug_mode})
@@ -1096,15 +1093,15 @@ if __name__ == '__main__':
     print("\n" + "="*60)
     print("  Traffic-Eye Mission Control Dashboard")
     print("="*60)
-    print(f"\n✅ Starting camera streamer...")
+    print("\n✅ Starting camera streamer...")
 
     # Start camera in background
     camera_streamer.start()
     time.sleep(2)  # Give camera time to initialize
 
-    print(f"✅ Dashboard starting on http://0.0.0.0:8080")
-    print(f"✅ Access from iPad: http://100.107.114.5:8080")
-    print(f"\nPress Ctrl+C to stop\n")
+    print("✅ Dashboard starting on http://0.0.0.0:8080")
+    print("✅ Access from iPad: http://100.107.114.5:8080")
+    print("\nPress Ctrl+C to stop\n")
 
     try:
         app.run(host='0.0.0.0', port=8080, debug=False, threaded=True)

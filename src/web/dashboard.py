@@ -7,8 +7,6 @@ Access from iPad via http://<tailscale-ip>:8080
 from flask import Flask, render_template_string, jsonify
 import subprocess
 import psutil
-import os
-from datetime import datetime
 from pathlib import Path
 
 app = Flask(__name__)
@@ -235,7 +233,7 @@ def get_cpu_temp():
                                 capture_output=True, text=True, timeout=2)
         temp = result.stdout.strip().split('=')[1].split("'")[0]
         return temp
-    except:
+    except Exception:
         return "N/A"
 
 def get_service_status():
@@ -244,7 +242,7 @@ def get_service_status():
         result = subprocess.run(['systemctl', 'is-active', 'traffic-eye-field'],
                                 capture_output=True, text=True, timeout=2)
         return result.stdout.strip()
-    except:
+    except Exception:
         return "unknown"
 
 def get_service_uptime():
@@ -259,7 +257,7 @@ def get_service_uptime():
             if '=' in timestamp_line:
                 return "Running"
         return "N/A"
-    except:
+    except Exception:
         return "N/A"
 
 def get_logs():
@@ -269,7 +267,7 @@ def get_logs():
                                  '-n', '50', '--no-pager'],
                                 capture_output=True, text=True, timeout=5)
         return result.stdout.strip().split('\n')
-    except:
+    except Exception:
         return ["Error fetching logs"]
 
 def get_db_stats():
@@ -288,7 +286,7 @@ def get_db_stats():
             conn.close()
             return {'violations': violations, 'detections': violations}
         return {'violations': 0, 'detections': 0}
-    except:
+    except Exception:
         return {'violations': 0, 'detections': 0}
 
 @app.route('/')

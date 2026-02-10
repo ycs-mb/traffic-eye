@@ -6,17 +6,11 @@ import tempfile
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-from unittest.mock import MagicMock, Mock, call, patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
 from src.config import AppConfig, EmailConfig, ReportingConfig, ViolationsConfig
-from src.models import (
-    EvidencePacket,
-    GPSReading,
-    ViolationCandidate,
-    ViolationType,
-)
 from src.reporting.report import Report, ReportGenerator
 from src.reporting.sender import EmailSender
 from src.utils.database import Database
@@ -168,7 +162,7 @@ class TestEmailSender:
         )
 
         # Enqueue email
-        queue_id = mock_db.enqueue_email(violation_id)
+        mock_db.enqueue_email(violation_id)
 
         # Process queue
         report_gen = ReportGenerator(mock_config, template_dir=str(Path(temp_dir)))
@@ -256,7 +250,7 @@ class TestEmailSender:
         mock_smtp_class.return_value = mock_server
 
         sender = EmailSender(mock_config, mock_db)
-        with sender._connect_smtp() as server:
+        with sender._connect_smtp():
             pass
 
         mock_server.ehlo.assert_called()

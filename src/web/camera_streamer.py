@@ -9,7 +9,6 @@ import numpy as np
 import threading
 import time
 import logging
-from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +67,6 @@ class CameraStreamer:
                     # Try legacy picamera
                     try:
                         from picamera import PiCamera
-                        from picamera.array import PiRGBArray
 
                         logger.info("Initializing Pi Camera (legacy)...")
                         self.camera = PiCamera()

@@ -2,15 +2,12 @@
 
 from datetime import datetime, timezone
 
-import numpy as np
 
 from src.models import (
     BoundingBox,
-    Detection,
     EvidencePacket,
     FrameData,
     GPSReading,
-    SignalState,
     ViolationCandidate,
     ViolationType,
 )

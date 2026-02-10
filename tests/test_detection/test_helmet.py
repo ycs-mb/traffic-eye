@@ -79,7 +79,7 @@ class TestTFLiteHelmetClassifier:
         if img is None:
             pytest.skip("Test image not available")
         has_helmet, conf = classifier.classify(img)
-        assert has_helmet is True, f"Expected helmet detection, got score implying no helmet"
+        assert has_helmet is True, "Expected helmet detection, got score implying no helmet"
         assert conf > 0.5
 
     def test_no_helmet_image_detected(self, classifier):
@@ -90,7 +90,7 @@ class TestTFLiteHelmetClassifier:
         if img is None:
             pytest.skip("Test image not available")
         has_helmet, conf = classifier.classify(img)
-        assert has_helmet is False, f"Expected no helmet detection"
+        assert has_helmet is False, "Expected no helmet detection"
         assert conf > 0.5
 
     def test_not_loaded_returns_default(self):

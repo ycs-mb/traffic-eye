@@ -1,7 +1,6 @@
 """Tests for GPS abstraction."""
 
 import socket
-import threading
 import time
 from datetime import datetime, timezone
 

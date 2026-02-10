@@ -16,12 +16,9 @@ import numpy as np
 from src.capture.buffer import CircularFrameBuffer
 from src.config import AppConfig
 from src.models import (
-    BoundingBox,
-    Detection,
     EvidencePacket,
     GPSReading,
     ViolationCandidate,
-    ViolationType,
 )
 from src.utils.database import Database
 from src.utils.geocoder import ReverseGeocoder
