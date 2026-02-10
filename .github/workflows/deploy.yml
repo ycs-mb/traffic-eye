@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     name: Test & Deploy on Raspberry Pi
-    runs-on: [self-hosted, raspberry-pi]
+    runs-on: self-hosted
 
     steps:
       - name: Checkout code
