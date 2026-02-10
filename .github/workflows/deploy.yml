@@ -25,7 +25,8 @@ jobs:
         run: |
           cd ~/traffic-eye
           source venv/bin/activate
-          pip install -e ".[pi,dev]"
+          # Install core dependencies only (skip [pi] extras - system packages used via --system-site-packages)
+          pip install -e ".[dev]" || pip install -e .
 
       - name: Run tests on Raspberry Pi hardware
         run: |
