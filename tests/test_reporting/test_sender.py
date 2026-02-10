@@ -108,7 +108,11 @@ class TestEmailSender:
     ):
         """Test handling of SMTP authentication error."""
         mock_server = MagicMock()
+        # Set side effect on the instance returned by context manager or constructor
         mock_server.login.side_effect = smtplib.SMTPAuthenticationError(535, "Bad auth")
+        
+        # Ensure mock_smtp_class returns this mock
+        mock_smtp_class.return_value = mock_server
         mock_smtp_class.return_value.__enter__.return_value = mock_server
 
         sender = EmailSender(mock_config, mock_db)
@@ -202,6 +206,7 @@ class TestEmailSender:
                 # No backoff on first attempt
                 mock_sleep.assert_not_called()
 
+    @patch.dict("os.environ", {"TEST_EMAIL_PASSWORD": "test_password"})
     def test_process_queue_max_attempts(self, mock_config, mock_db):
         """Test that max retry attempts are respected."""
         violation_id = "test-violation-max"
@@ -214,9 +219,12 @@ class TestEmailSender:
 
         queue_id = mock_db.enqueue_email(violation_id)
 
-        # Simulate 5 failed attempts
-        for _ in range(5):
-            mock_db.update_email_status(queue_id, "pending")
+        # Simulate max attempts reached directly
+        mock_db._conn.execute(
+            "UPDATE email_queue SET attempts = ?, status = 'pending' WHERE id = ?",
+            (5, queue_id)
+        )
+        mock_db._conn.commit()
 
         sender = EmailSender(mock_config, mock_db)
         sent_count = sender.process_queue()
@@ -225,7 +233,7 @@ class TestEmailSender:
 
         # Should be marked as failed
         queue_entry = mock_db._conn.execute(
-            "SELECT status FROM email_queue WHERE id = ?", (queue_id,)
+            "SELECT status, attempts FROM email_queue WHERE id = ?", (queue_id,)
         ).fetchone()
         assert queue_entry["status"] == "failed"
 
@@ -311,6 +319,13 @@ class TestEmailSender:
     def test_cleanup_evidence(self, mock_config, mock_db, temp_dir):
         """Test evidence cleanup after successful send."""
         violation_id = "test-cleanup"
+        mock_db.insert_violation(
+            violation_id=violation_id,
+            violation_type="no_helmet",
+            confidence=0.95,
+            timestamp=datetime.now(timezone.utc).isoformat(),
+        )
+
         evidence_dir = Path(temp_dir) / violation_id
         evidence_dir.mkdir(parents=True)
 
@@ -330,6 +345,7 @@ class TestEmailSender:
         # File should be deleted
         assert not frame_path.exists()
 
+    @patch.dict("os.environ", {"TEST_EMAIL_PASSWORD": "test_password"})
     def test_process_queue_without_evidence(self, mock_config, mock_db):
         """Test queue processing when evidence is missing."""
         violation_id = "test-no-evidence"
@@ -342,6 +358,10 @@ class TestEmailSender:
 
         queue_id = mock_db.enqueue_email(violation_id)
 
+        # Verify pending count before processing
+        pending = mock_db.get_pending_emails()
+        assert len(pending) == 1
+        
         sender = EmailSender(mock_config, mock_db)
         sent_count = sender.process_queue()
 

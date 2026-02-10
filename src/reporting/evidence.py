@@ -70,6 +70,13 @@ class EvidencePackager:
             violation, clip_frames, self._config.reporting.best_frames_count
         )
 
+        # Build metadata (needed for GPS address in violation record)
+        metadata = self._build_metadata(violation, clip_frames, best_frames)
+
+        # Persist violation first (to satisfy FK constraints for evidence files)
+        gps_address = metadata.get("gps", {}).get("address")
+        self._persist_violation(violation_id, violation, gps_address)
+
         # Process frames and video
         best_frames_jpeg, file_hashes = self._process_frames(
             violation_id, evidence_path, violation, best_frames
@@ -77,11 +84,6 @@ class EvidencePackager:
         video_path = self._process_video(
             violation_id, evidence_path, clip_frames, file_hashes
         )
-
-        # Build metadata and persist
-        metadata = self._build_metadata(violation, clip_frames, best_frames)
-        gps_address = metadata.get("gps", {}).get("address")
-        self._persist_violation(violation_id, violation, gps_address)
 
         packet = EvidencePacket(
             violation_id=violation_id,

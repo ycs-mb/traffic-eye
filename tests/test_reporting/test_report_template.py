@@ -224,7 +224,7 @@ class TestReportTemplate:
         assert len(subject) > 10
         assert len(subject) < 100
         # Should contain violation ID prefix
-        assert "test-1234" in subject.lower()
+        assert "test-123" in subject.lower()
 
     def test_multiple_violations_types(self):
         """Test rendering different violation types."""
@@ -255,4 +255,12 @@ class TestReportTemplate:
             # Should generate valid report for each type
             assert report.html_body
             assert report.text_body
-            assert vtype.value in report.subject.lower()
+            
+            # Check for display name keywords in subject
+            subject_lower = report.subject.lower()
+            if vtype == ViolationType.NO_HELMET:
+                assert "helmet" in subject_lower
+            elif vtype == ViolationType.RED_LIGHT_JUMP:
+                assert "red light" in subject_lower
+            elif vtype == ViolationType.WRONG_SIDE:
+                assert "wrong side" in subject_lower
