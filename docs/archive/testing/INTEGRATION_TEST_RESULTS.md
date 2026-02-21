@@ -111,7 +111,7 @@ set +a
 
 ```bash
 # Working command:
-export TRAFFIC_EYE_CLOUD_API_KEY="AIzaSyDKfENM6KXaEcvEbj6Dt3r0_PUvjqZv7Sg"
+export TRAFFIC_EYE_CLOUD_API_KEY="****"
 source venv/bin/activate
 python scripts/test_integration.py
 ```
